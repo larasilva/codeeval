@@ -1,0 +1,59 @@
+import java.io.*;
+import java.util.Stack;
+public class Main {
+    public static void main (String[] args) throws IOException {
+        File file = new File(args[0]);
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+
+        String line;
+        while ((line = buffer.readLine()) != null) {
+            line = line.trim();
+            // Process line of input Here
+            if (isWellFormed(line)) System.out.println("True");
+            else System.out.println("False");
+        }
+    }
+    
+    private static boolean isWellFormed(String line) {
+        boolean result = true;
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < line.length(); i++) {
+            Character parentisis = line.charAt(i);
+            if (parentisis == '{' || parentisis == '(' || parentisis == '[') {
+                stack.push(parentisis);
+            }
+            if (parentisis == '}' || parentisis == ')' || parentisis == ']') {
+                if (stack.empty()) {
+                    return false;
+                } 
+                else {
+                    Character in = stack.pop();
+                    boolean check = isMatch(in, parentisis);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+        }
+        if (!stack.empty()) {
+            result = false;
+        }
+        return result;
+    }
+    
+    private static boolean isMatch(Character in, Character out){
+        if (in == '('){
+            return (out == ')');
+        }
+        if (in == '{'){
+            return (out == '}');
+        }
+        if (in == '['){
+            return (out == ']');
+        }
+        else{
+            return false;
+        }
+    }
+
+}
